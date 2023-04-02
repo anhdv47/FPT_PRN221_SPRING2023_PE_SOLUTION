@@ -1,0 +1,49 @@
+﻿@page
+@model Q2.Pages.Employees.IndexModel
+@{
+}
+<div style="display: flex;justify-content: center;">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>EmployeeId</th>
+                <th>EmployeeName</th>
+                <th>Title</th>
+                <th>BirthDate</th>
+                <th>HireDate</th>
+                <th>Department</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var employee in Model.ListOfEmployee)
+            {
+                <tr id="@employee.EmployeeId">
+                    <td>@employee.EmployeeId</td>
+                    <td>@employee.FirstName @employee.LastName</td>
+                    <td>@employee.Title</td>
+                    <td>@employee.BirthDate</td>
+                    <td>@employee.HireDate</td>
+                    <td>@employee.Department?.DepartmentName</td>
+                    <td><a href="javascript:void(0)" onclick="onDelete(@employee.EmployeeId)">Delete</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@section Scripts {
+    <script src="~/js/signalr/dist/browser/signalr.js"></script>
+
+    <script>
+        var connection = new signalR.HubConnectionBuilder().withUrl("/employeeHub").build();
+        connection.start();
+        function onDelete(employeeId) {
+            connection.invoke("DeleteEmployee", employeeId);
+        }
+        connection.on("EmployeeDeletedID", (deleteId) => {
+            const element = document.getElementById(deleteId);
+            element.remove();
+        });
+    </script>
+}
