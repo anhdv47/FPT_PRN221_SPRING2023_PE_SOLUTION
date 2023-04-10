@@ -77,7 +77,7 @@ namespace Q1
             {
                 Employee employee = GetEmployeeObject();
                 employee.EmployeeId = 0;
-                _context.Employees.Add(GetEmployeeObject());
+                _context.Employees.Add(employee);
                 if (_context.SaveChanges() > 0)
                 {
                     MessageBox.Show("Add Employee Success");
